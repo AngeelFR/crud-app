@@ -6,7 +6,7 @@ import ProductoList from './components/ProductoList';
 import './App.css';
 
 // Usamos el puerto 3001 que es donde corre tu Backend local
-const API = 'http://localhost:3001/api';
+const API = 'https://crud-app-n2yn.onrender.com/api';
 
 export default function App() {
   const [productos, setProductos] = useState([]);
@@ -98,4 +98,4 @@ export default function App() {
       </main>
     </div>
   );
-}
+} 
