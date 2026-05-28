@@ -10,8 +10,8 @@ function App() {
   const [productoEditar, setProductoEditar] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Reemplaza esto con la URL real de tu backend en Render
-  const API_URL = "https://tu-backend-en-render.onrender.com/productos";
+  // ⚠️ 1. CAMBIA ESTE LINK DE ABAJO POR EL TUYO DE RENDER (Debe terminar en /productos)
+  const API_URL = "https://tu-proyecto-backend.onrender.com/productos"; 
 
   // Cargar productos al iniciar
   useEffect(() => {
@@ -33,43 +33,65 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const prodData = { nombre, precio: Number(precio), categoria, stock: Number(stock) };
-
-    // 1. 👈 PRIMER ALERTA: Nos dirá a qué URL le está pegando
-    alert("Intentando enviar a: " + API_URL + "\nDatos: " + JSON.stringify(prodData));
+    // Convertimos los valores a los tipos correctos para la base de datos
+    const prodData = { 
+      nombre: nombre, 
+      precio: Number(precio), 
+      categoria: categoria, 
+      stock: Number(stock) 
+    };
 
     try {
+      let respuesta;
       if (productoEditar) {
-        await fetch(`${API_URL}/${productoEditar.id}`, {
+        // Editar producto existente
+        respuesta = await fetch(`${API_URL}/${productoEditar.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(prodData)
         });
-        setProductoEditar(null);
       } else {
-        await fetch(API_URL, {
+        // Crear nuevo producto
+        respuesta = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(prodData)
         });
       }
-      setNombre(''); setPrecio(''); setCategoria(''); setStock('');
-      obtenerProductos();
+
+      if (respuesta.ok) {
+        alert("¡Producto guardado con éxito!");
+        // Limpiar formulario y recargar lista
+        setNombre('');
+        setPrecio('');
+        setCategoria('');
+        setStock('');
+        setProductoEditar(null);
+        obtenerProductos();
+      } else {
+        const errorData = await respuesta.text();
+        alert("❌ El servidor rechazó los datos:\n" + errorData);
+      }
+
     } catch (error) {
       console.error("Error en el formulario:", error);
-      
-      // 2. 👈 SEGUNDA ALERTA: Si el servidor de Render rechaza el envío
-      alert("💥 ¡TRONÓ LA PETICIÓN! El error real es:\n" + error.message);
+      alert("💥 Error de red o el servidor está apagado:\n" + error.message);
     }
   };
 
   const eliminarProducto = async (id) => {
     if (window.confirm("¿Seguro que quieres eliminar este producto?")) {
       try {
-        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-        obtenerProductos();
+        const respuesta = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        if (respuesta.ok) {
+          alert("Producto eliminado.");
+          obtenerProductos();
+        } else {
+          alert("No se pudo eliminar el producto.");
+        }
       } catch (error) {
         console.error("Error al eliminar:", error);
+        alert("Error al conectar con el servidor para eliminar.");
       }
     }
   };
