@@ -11,7 +11,8 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   
-  const API_URL = "https://crud-app-n2yn.onrender.com/api/productos/productos";
+ // 🔗 ¡Esta es la URL ganadora! Conecta directo con tu ruta de Express
+  const API_URL = "https://crud-app-n2yn.onrender.com/api/productos";
 
   // Cargar productos al iniciar
   useEffect(() => {
