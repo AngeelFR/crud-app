@@ -32,8 +32,11 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("¡El botón sí funciona y está intentando guardar!");
+    
     const prodData = { nombre, precio: Number(precio), categoria, stock: Number(stock) };
+
+    // 1. 👈 PRIMER ALERTA: Nos dirá a qué URL le está pegando
+    alert("Intentando enviar a: " + API_URL + "\nDatos: " + JSON.stringify(prodData));
 
     try {
       if (productoEditar) {
@@ -55,8 +58,8 @@ function App() {
     } catch (error) {
       console.error("Error en el formulario:", error);
       
-      // 
-      alert("¡Tronó la petición! El error es: " + error.message);
+      // 2. 👈 SEGUNDA ALERTA: Si el servidor de Render rechaza el envío
+      alert("💥 ¡TRONÓ LA PETICIÓN! El error real es:\n" + error.message);
     }
   };
 
