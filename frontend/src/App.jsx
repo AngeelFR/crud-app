@@ -11,7 +11,8 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   // ⚠️ 1. CAMBIA ESTE LINK DE ABAJO POR EL TUYO DE RENDER (Debe terminar en /productos)
-  const API_URL = "https://tu-proyecto-backend.onrender.com/productos"; 
+  // 🔗 Tu URL real de Render enlazada correctamente:
+  const API_URL = "https://crud-app-n2yn.onrender.com/productos";
 
   // Cargar productos al iniciar
   useEffect(() => {
