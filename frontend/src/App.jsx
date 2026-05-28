@@ -10,9 +10,8 @@ function App() {
   const [productoEditar, setProductoEditar] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // ⚠️ 1. CAMBIA ESTE LINK DE ABAJO POR EL TUYO DE RENDER (Debe terminar en /productos)
-  // 🔗 Tu URL real de Render enlazada correctamente:
-  const API_URL = "https://crud-app-n2yn.onrender.com/productos";
+  
+  const API_URL = "https://crud-app-n2yn.onrender.com/api/productos/productos";
 
   // Cargar productos al iniciar
   useEffect(() => {
