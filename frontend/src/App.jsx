@@ -32,6 +32,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    alert("¡El botón sí funciona y está intentando guardar!");
     const prodData = { nombre, precio: Number(precio), categoria, stock: Number(stock) };
 
     try {
