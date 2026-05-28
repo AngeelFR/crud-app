@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   // Reemplaza esto con la URL real de tu backend en Render
-  const API_URL = "https://tu-backend-en-render.onrender.com/productos"; 
+  const API_URL = "https://tu-backend-en-render.onrender.com/productos";
 
   // Cargar productos al iniciar
   useEffect(() => {
