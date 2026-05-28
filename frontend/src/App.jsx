@@ -37,7 +37,6 @@ function App() {
 
     try {
       if (productoEditar) {
-        // Editar
         await fetch(`${API_URL}/${productoEditar.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -45,21 +44,19 @@ function App() {
         });
         setProductoEditar(null);
       } else {
-        // Crear
         await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(prodData)
         });
       }
-      // Limpiar formulario y recargar
-      setNombre('');
-      setPrecio('');
-      setCategoria('');
-      setStock('');
+      setNombre(''); setPrecio(''); setCategoria(''); setStock('');
       obtenerProductos();
     } catch (error) {
       console.error("Error en el formulario:", error);
+      
+      // 
+      alert("¡Tronó la petición! El error es: " + error.message);
     }
   };
 
