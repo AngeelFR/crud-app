@@ -1,101 +1,49 @@
-// frontend\src\App.jsx
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import ProductoForm from './components/ProductoForm';
-import ProductoList from './components/ProductoList';
-import './App.css';
+return (
+  <div>
+    <h1>Panel de Administración del Inventario</h1>
+    <h3>Práctica de Laboratorio — Programación Web</h3>
 
-// Usamos el puerto 3001 que es donde corre tu Backend local
-const API = 'https://crud-app-n2yn.onrender.com/api';
+    {/* Contenedor principal de dos columnas */}
+    <div className="container">
+      
+      {/* Columna Izquierda: Formulario */}
+      <div className="card">
+        <h2>{productoEditar ? 'Editar Producto' : 'Nuevo Producto'}</h2>
+        {/* Aquí dejas tu formulario como ya lo tenías, solo asegúrate de ponerle className="btn-primary" al botón de Guardar */}
+        <form onSubmit={handleSubmit}>
+          {/* ... tus inputs de nombre, precio, categoria, stock ... */}
+          <button type="submit" className="btn-primary">Guardar</button>
+        </form>
+      </div>
 
-export default function App() {
-  const [productos, setProductos] = useState([]);
-  const [productoEditar, setProductoEditar] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState(null);
+      {/* Columna Derecha: Lista de Productos */}
+      <div className="card">
+        <h2>Productos en Existencia</h2>
+        
+        {loading ? (
+          <div className="loading-box">Cargando productos...</div>
+        ) : productos.length === 0 ? (
+          <div className="empty-box">No hay productos. ¡Crea el primero!</div>
+        ) : (
+          <div className="products-grid">
+            {productos.map((prod) => (
+              <div key={prod.id} className="product-item">
+                <div className="product-info">
+                  <span className="product-category">{prod.categoria}</span>
+                  <h4>{prod.nombre}</h4>
+                  <p className="product-price">${prod.precio} MXN</p>
+                  <p className="product-stock">Stock: {prod.stock} unidades</p>
+                </div>
+                <div className="product-actions">
+                  <button onClick={() => setProductoEditar(prod)} className="btn-edit">Editar</button>
+                  <button onClick={() => eliminarProducto(prod.id)} className="btn-delete">Eliminar</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-  // Función para mostrar alertas simples en caso de error o éxito
-  const notif = (texto) => {
-    alert(texto);
-  };
-
-  useEffect(() => {
-    cargar();
-  }, []);
-
-  // 1. Cargar los productos desde el Backend (GET)
-  const cargar = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get(`${API}/productos`);
-      setProductos(data);
-    } catch (error) {
-      notif('Error al cargar los productos');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 2. Guardar o actualizar un producto (POST / PUT)
-  const guardar = async (form) => {
-    try {
-      if (productoEditar) {
-        // Modo Edición
-        await axios.put(`${API}/productos/${productoEditar.id}`, form);
-        notif('Producto actualizado con éxito');
-        setProductoEditar(null);
-      } else {
-        // Modo Nuevo
-        await axios.post(`${API}/productos`, form);
-        notif('Producto guardado con éxito');
-      }
-      cargar(); // Recarga la lista
-    } catch (error) {
-      notif('Error al guardar el producto');
-    }
-  };
-
-  // 3. Eliminar un producto (DELETE)
-  const eliminar = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
-    try {
-      await axios.delete(`${API}/productos/${id}`);
-      notif('Producto eliminado');
-      cargar(); // Recarga la lista
-    } catch (error) {
-      notif('Error al eliminar el producto');
-    }
-  };
-
-  const cancelarEdicion = () => {
-    setProductoEditar(null);
-  };
-
-  return (
-    <div className='app-container' style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
-      <header style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <h1>Panel de Administración del Inventario</h1>
-        <p>Práctica de Laboratorio — Programación Web</p>
-      </header>
-
-      <main style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-        {/* Componente del Formulario */}
-        <ProductoForm 
-          onGuardar={guardar} 
-          productoEditar={productoEditar} 
-          onCancelar={cancelarEdicion} 
-        />
-
-        {/* Estado de carga */}
-        {loading && <p style={{ textAlign: 'center' }}>Cargando productos...</p>}
-
-        {/* Componente de la Lista en Tarjetas */}
-        <ProductoList 
-          productos={productos} 
-          onEditar={setProductoEditar} 
-          onEliminar={eliminar} 
-        />
-      </main>
     </div>
-  );
-} 
+  </div>
+);
